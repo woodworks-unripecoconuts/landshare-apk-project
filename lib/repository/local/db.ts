@@ -117,6 +117,15 @@ export function emit(c: Collection): void {
   listeners.forEach((l) => l(c));
 }
 
+// 다른 브라우저 탭에서 데이터를 바꾸면 이 탭에도 알려 줍니다.
+// (가짜 로그인 상태는 모든 탭이 함께 쓰므로, 역할을 바꾸면 다른 탭은 새로고침해 주세요.)
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    const m = e.key?.match(/^madang:db:(\w+)$/);
+    if (m && (TABLE_NAMES as string[]).includes(m[1])) emit(m[1] as Collection);
+  });
+}
+
 /** 진짜 서버처럼 아주 짧게 기다립니다 → 로딩 화면도 확인할 수 있게 */
 export const MOCK_DELAY_MS = 120;
 export function delay<T>(value: T, ms = MOCK_DELAY_MS): Promise<T> {
