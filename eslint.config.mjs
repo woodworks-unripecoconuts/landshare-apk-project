@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Netlify CLI가 로컬 배포 때 만드는 폴더
+    ".netlify/**",
   ]),
 ]);
 
