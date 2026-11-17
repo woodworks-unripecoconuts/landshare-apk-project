@@ -25,12 +25,12 @@ function FitToItems({ items, fallbackCenter, fallbackZoom }: Omit<SearchMapProps
   const key = items.map((i) => i.space.id).join(",");
   useEffect(() => {
     if (items.length === 0) {
-      map.setView(fallbackCenter ?? GANGWON_CENTER, fallbackZoom ?? GANGWON_ZOOM);
+      map.setView(fallbackCenter ?? GANGWON_CENTER, fallbackZoom ?? GANGWON_ZOOM, { animate: false });
     } else if (items.length === 1) {
-      map.setView(items[0].space.approxCenter, 12);
+      map.setView(items[0].space.approxCenter, 12, { animate: false });
     } else {
       const bounds = L.latLngBounds(items.map((i) => [i.space.approxCenter.lat, i.space.approxCenter.lng]));
-      map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12 });
+      map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12, animate: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- 결과 목록(key)이 바뀔 때만 다시 맞춤
   }, [key, map]);

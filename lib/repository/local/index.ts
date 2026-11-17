@@ -196,11 +196,15 @@ export function createLocalRepository(): Repository {
           .filter((s) => !filter.types?.length || filter.types.includes(s.type))
           .filter((s) => !filter.guests || s.maxGuests >= filter.guests)
           .filter((s) => !filter.amenities?.length || filter.amenities.every((a) => s.amenities.includes(a)))
-          .filter(
-            (s) =>
-              !filter.date ||
-              (s.availableDates.includes(filter.date) && !takenDatesOf(s.id, bookings).includes(filter.date)),
-          )
+          .filter((s) => {
+            if (!filter.date) return true;
+            // 기간 검색: 시작일~끝 날짜 전날까지 모든 밤이 열려 있고 비어 있어야 함
+            const end = filter.endDate && filter.endDate > filter.date ? filter.endDate : filter.date;
+            const need = occupiedDates({ startDate: filter.date, endDate: end });
+            const open = new Set(s.availableDates);
+            const taken = new Set(takenDatesOf(s.id, bookings));
+            return need.every((d) => open.has(d) && !taken.has(d));
+          })
           .sort(newestFirst)
           .map((s) => toListItem(s, idx))
           .filter((item) => !filter.verifiedOnly || item.hostVerified);

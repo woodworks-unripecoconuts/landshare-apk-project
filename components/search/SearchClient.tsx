@@ -7,7 +7,7 @@ import { repo, type SpaceFilter } from "@/lib/repository";
 import { useRepoQuery } from "@/lib/hooks/useRepoQuery";
 import { filterFromParams, filterToQuery } from "@/lib/utils/search-query";
 import { getRegion } from "@/data/regions";
-import { formatDate } from "@/lib/domain/dates";
+import { rangeLabel } from "@/components/ui/DateRangePicker";
 import { AD_CONFIG } from "@/lib/ads/config";
 import { FilterPanel } from "./FilterPanel";
 import { SpaceCard } from "@/components/space/SpaceCard";
@@ -37,7 +37,7 @@ export function SearchClient() {
   }
 
   const region = filter.regionCode ? getRegion(filter.regionCode) : null;
-  const summary = [region?.name ?? "강원 전체", filter.date ? formatDate(filter.date) : null, filter.guests ? `${filter.guests}명` : null]
+  const summary = [region?.name ?? "강원 전체", filter.date ? rangeLabel(filter.date, filter.endDate) : null, filter.guests ? `${filter.guests}명` : null]
     .filter(Boolean)
     .join(" · ");
 

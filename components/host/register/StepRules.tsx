@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { RULE_SUGGESTIONS } from "@/lib/domain/space-rules";
-import { fromDateString, upcomingDates } from "@/lib/domain/dates";
+import { dateRange, fromDateString, upcomingDates } from "@/lib/domain/dates";
+import { rangeLabel } from "@/components/ui/DateRangePicker";
+import { cn } from "@/lib/utils/cn";
 import { Calendar } from "@/components/ui/Calendar";
 import { Button } from "@/components/ui/Button";
 import { effectiveNearForest, type RegisterDraft } from "./draft";
@@ -14,6 +16,8 @@ type Props = { draft: RegisterDraft; set: (patch: Partial<RegisterDraft>) => voi
 /** ⑤ 이용 규칙, 체크인/아웃 시간, 신청 가능 날짜 */
 export function StepRules({ draft, set }: Props) {
   const [custom, setCustom] = useState("");
+  const [dateMode, setDateMode] = useState<"range" | "single">("range");
+  const [range, setRange] = useState<{ s: string | null; e: string | null }>({ s: null, e: null });
   const nearForest = effectiveNearForest(draft);
   const suggestions = RULE_SUGGESTIONS.filter(
     (r) => !draft.rules.includes(r) && !(nearForest && r.startsWith("불은")),
@@ -124,9 +128,68 @@ export function StepRules({ draft, set }: Props) {
             모두 지우기
           </Button>
         </div>
-        <div className="max-w-sm">
-          <Calendar mode="multiple" selected={draft.availableDates} onToggle={toggleDate} maxDaysAhead={180} />
+        <div role="tablist" className="flex w-fit rounded-full border border-soil-200 bg-white p-0.5">
+          {(
+            [
+              ["range", "기간으로 선택"],
+              ["single", "하루씩 선택"],
+            ] as const
+          ).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={dateMode === key}
+              onClick={() => setDateMode(key)}
+              className={cn(
+                "h-9 rounded-full px-4 text-sm font-semibold",
+                dateMode === key ? "bg-ink text-white" : "text-soil-600",
+              )}
+            >
+              {label}
+            </button>
+          ))}
         </div>
+
+        {dateMode === "range" ? (
+          <div className="max-w-sm space-y-2">
+            <Calendar mode="range" start={range.s} end={range.e} onChange={(s, e) => setRange({ s, e })} />
+            <p className="text-sm font-semibold text-grass-800">
+              {range.s ? `고른 기간: ${rangeLabel(range.s, range.e)}` : "시작 날짜와 끝 날짜를 차례로 눌러 주세요."}
+            </p>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                disabled={!range.s}
+                onClick={() => {
+                  if (!range.s) return;
+                  addDates(dateRange(range.s, range.e ?? range.s));
+                  setRange({ s: null, e: null });
+                }}
+              >
+                이 기간 모두 열기
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!range.s}
+                onClick={() => {
+                  if (!range.s) return;
+                  const remove = new Set(dateRange(range.s, range.e ?? range.s));
+                  set({ availableDates: draft.availableDates.filter((d) => !remove.has(d)) });
+                  setRange({ s: null, e: null });
+                }}
+              >
+                이 기간 닫기
+              </Button>
+            </div>
+            <p className="text-xs text-soil-500">기간의 시작일과 끝 날짜를 모두 포함해요. 연 날짜는 &lsquo;하루씩 선택&rsquo;에서 확인·수정할 수 있어요.</p>
+          </div>
+        ) : (
+          <div className="max-w-sm">
+            <Calendar mode="multiple" selected={draft.availableDates} onToggle={toggleDate} maxDaysAhead={180} />
+          </div>
+        )}
         {draft.availableDates.length > 0 && (
           <p className="text-xs text-soil-500">
             가장 빠른 날: {fromDateString(draft.availableDates[0]).toLocaleDateString("ko-KR")}

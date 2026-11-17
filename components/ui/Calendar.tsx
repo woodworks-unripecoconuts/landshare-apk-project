@@ -25,7 +25,8 @@ type Props =
     }
   | {
       mode: "range";
-      available: DateString[];
+      /** 고를 수 있는 날짜. 없으면 내일부터 모든 날짜를 고를 수 있어요 (찾기·등록용) */
+      available?: DateString[];
       taken?: DateString[];
       start: DateString | null;
       end: DateString | null;
@@ -37,7 +38,7 @@ export function Calendar(props: Props) {
   const todayStr = today();
   const initial = (() => {
     const first =
-      props.mode === "range" ? (props.start ?? props.available[0]) : props.mode === "view" ? props.available[0] : null;
+      props.mode === "range" ? (props.start ?? props.available?.[0]) : props.mode === "view" ? props.available[0] : null;
     const d = first ? fromDateString(first) : new Date();
     return { y: d.getFullYear(), m: d.getMonth() };
   })();
@@ -55,7 +56,8 @@ export function Calendar(props: Props) {
     setYM({ y: d.getFullYear(), m: d.getMonth() });
   };
 
-  const availableSet = new Set(props.mode === "multiple" ? props.selected : props.available);
+  const availableSet = new Set(props.mode === "multiple" ? props.selected : (props.available ?? []));
+  const anyDate = props.mode === "range" && !props.available;
   const takenSet = new Set(props.mode !== "multiple" ? (props.taken ?? []) : []);
   const maxDate =
     props.mode === "multiple" && props.maxDaysAhead
@@ -72,11 +74,11 @@ export function Calendar(props: Props) {
       return { enabled: !past && !tooFar, on: availableSet.has(d), taken: false, inRange: false };
     }
     const { start, end } = props;
-    const selectable = !past && availableSet.has(d) && !takenSet.has(d);
+    const selectable = !past && (anyDate || availableSet.has(d)) && !takenSet.has(d);
     const canBeEnd = !props.singleDay && !!start && !end && d > start && !past;
     const on = d === start || d === end;
     const inRange = !!start && !!end && d > start && d < end;
-    return { enabled: selectable || canBeEnd, on, taken: takenSet.has(d), inRange, open: selectable };
+    return { enabled: selectable || canBeEnd, on, taken: takenSet.has(d), inRange, open: selectable && !anyDate };
   }
 
   function onClick(d: DateString) {
@@ -155,6 +157,8 @@ export function Calendar(props: Props) {
           <span className="flex items-center gap-1">
             <i className="inline-block size-3 rounded bg-grass-600" /> 신청 가능으로 연 날짜
           </span>
+        ) : anyDate ? (
+          <span>시작 날짜를 누른 뒤 끝 날짜를 눌러 주세요</span>
         ) : (
           <>
             <span className="flex items-center gap-1">

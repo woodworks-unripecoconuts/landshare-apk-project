@@ -25,7 +25,7 @@ function ClickHandler({ onChange }: { onChange: (v: LatLng) => void }) {
 function Recenter({ center, zoom }: { center: LatLng; zoom: number }) {
   const map = useMap();
   useEffect(() => {
-    map.setView(center, zoom);
+    map.setView(center, zoom, { animate: false });
   }, [center.lat, center.lng, zoom, map]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }

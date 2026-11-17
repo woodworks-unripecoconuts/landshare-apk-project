@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 /** 간단한 팝업 창 (모바일에서는 아래에서 올라오는 시트 모양) */
@@ -23,7 +24,8 @@ export function Modal({
   }, [open, onClose]);
 
   if (!open) return null;
-  return (
+  // 페이지 맨 바깥(body)에 그려서, 흐림 효과가 있는 고정 바 안에서 열어도 화면 전체를 덮게 합니다.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={onClose}>
       <div
         role="dialog"
@@ -40,6 +42,7 @@ export function Modal({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

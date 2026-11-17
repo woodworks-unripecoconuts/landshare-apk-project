@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { repo } from "@/lib/repository";
 import { useRepoQuery } from "@/lib/hooks/useRepoQuery";
-import { nextWeekday, formatDate } from "@/lib/domain/dates";
+import { addDays, formatRange, nextWeekday } from "@/lib/domain/dates";
 import { REGIONS } from "@/data/regions";
 import { naturePhoto } from "@/data/images";
 import { SpaceImage } from "@/components/space/SpaceImage";
@@ -18,7 +18,8 @@ export function HomeSections() {
   const weekend = useRepoQuery(
     async () => {
       const date = nextWeekday(6);
-      return { date, items: await repo.spaces.search({ date }) };
+      const endDate = addDays(date, 1);
+      return { date, endDate, items: await repo.spaces.search({ date, endDate }) };
     },
     [],
     [...WATCH],
@@ -36,10 +37,10 @@ export function HomeSections() {
     <div className="space-y-14 md:space-y-20">
       <SpaceRow
         title="이번 주말 비어 있는 마당"
-        subtitle={weekend.data ? `${formatDate(weekend.data.date)} 체크인 가능` : undefined}
+        subtitle={weekend.data ? `${formatRange(weekend.data.date, weekend.data.endDate)} 비어 있어요` : undefined}
         items={weekend.data?.items ?? []}
         loading={weekend.loading}
-        moreHref={weekend.data ? `/search?date=${weekend.data.date}` : "/search"}
+        moreHref={weekend.data ? `/search?date=${weekend.data.date}&end=${weekend.data.endDate}` : "/search"}
       />
 
       <SpaceRow

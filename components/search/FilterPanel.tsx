@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeCheck, SlidersHorizontal, X } from "lucide-react";
+import { BadgeCheck, CalendarDays, SlidersHorizontal, X } from "lucide-react";
+import { DateRangePicker } from "@/components/ui/DateRangePicker";
 import type { SpaceFilter } from "@/lib/repository";
 import type { AmenityKey, RegionCode, SpaceType } from "@/lib/domain/types";
 import { REGIONS } from "@/data/regions";
 import { SPACE_TYPES } from "@/data/space-types";
 import { AMENITIES } from "@/data/amenities";
-import { relDate } from "@/lib/domain/dates";
 import { AMENITY_ICONS } from "@/components/space/amenity-icons";
 import { cn } from "@/lib/utils/cn";
 
@@ -36,8 +36,8 @@ function toggle<T>(list: T[] | undefined, v: T): T[] | undefined {
 /** 찾기 필터: 시·군, 유형, 날짜, 인원, 편의시설 */
 export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChange: (f: SpaceFilter) => void }) {
   const [open, setOpen] = useState(false);
-  const extraCount = (filter.amenities?.length ?? 0) + (filter.date ? 1 : 0) + (filter.guests ? 1 : 0);
-  const anyFilter = !!(filter.regionCode || filter.types?.length || filter.verifiedOnly || extraCount);
+  const extraCount = (filter.amenities?.length ?? 0) + (filter.guests ? 1 : 0);
+  const anyFilter = !!(filter.regionCode || filter.date || filter.types?.length || filter.verifiedOnly || extraCount);
 
   const label = "text-xs font-bold text-soil-600";
   const input = "h-10 w-full rounded-xl border border-soil-200 bg-white px-3 text-[15px]";
@@ -59,6 +59,18 @@ export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChang
             </option>
           ))}
         </select>
+        <DateRangePicker
+          start={filter.date}
+          end={filter.endDate}
+          title="이용 기간"
+          onChange={(start, end) => onChange({ ...filter, date: start ?? undefined, endDate: end ?? undefined })}
+        >
+          {(label, open) => (
+            <Chip on={!!filter.date} onClick={open}>
+              <CalendarDays className="size-4" /> {filter.date ? label : "이용 기간"}
+            </Chip>
+          )}
+        </DateRangePicker>
         {SPACE_TYPES.map((t) => (
           <Chip
             key={t.key}
@@ -92,16 +104,6 @@ export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChang
 
       {open && (
         <div className="grid gap-4 rounded-3xl border border-soil-200/80 bg-white p-4 shadow-soft sm:grid-cols-2">
-          <label className="space-y-1">
-            <span className={label}>이용 날짜</span>
-            <input
-              type="date"
-              className={input}
-              min={relDate(1)}
-              value={filter.date ?? ""}
-              onChange={(e) => onChange({ ...filter, date: e.target.value || undefined })}
-            />
-          </label>
           <label className="space-y-1">
             <span className={label}>인원</span>
             <select

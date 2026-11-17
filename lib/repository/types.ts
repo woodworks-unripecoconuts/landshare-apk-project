@@ -97,8 +97,10 @@ export interface VerificationWithUser {
 export interface SpaceFilter {
   regionCode?: RegionCode;
   types?: SpaceType[];
-  /** 이 날 신청 가능한 곳만 */
+  /** 이 날(시작일)부터 신청 가능한 곳만 */
   date?: DateString;
+  /** 끝 날짜(체크아웃). 있으면 date~endDate 기간의 모든 밤이 비어 있는 곳만 */
+  endDate?: DateString;
   /** 이 인원 이상 받을 수 있는 곳만 */
   guests?: number;
   /** 이 편의시설을 모두 갖춘 곳만 */

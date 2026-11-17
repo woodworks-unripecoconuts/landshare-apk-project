@@ -11,31 +11,50 @@ import { REGIONS } from "@/data/regions";
 import { HERO_IMAGE } from "@/data/images";
 import { SLOGAN } from "@/data/policies";
 import type { RegionCode } from "@/lib/domain/types";
-import { nextWeekday, relDate } from "@/lib/domain/dates";
+import { addDays, nextWeekday } from "@/lib/domain/dates";
+import { DateRangePicker } from "@/components/ui/DateRangePicker";
 import { filterToQuery } from "@/lib/utils/search-query";
 
-function Field({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
+function Field({
+  icon,
+  label,
+  children,
+  asDiv,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+  /** 안에 버튼이 있을 때는 label 대신 div로 */
+  asDiv?: boolean;
+}) {
+  const Tag = asDiv ? "div" : "label";
   return (
-    <label className="flex min-w-0 flex-1 items-center gap-3 rounded-full px-5 py-2.5 transition hover:bg-soil-50">
+    <Tag className="flex min-w-0 flex-1 items-center gap-3 rounded-full px-5 py-2.5 transition hover:bg-soil-50">
       <span className="text-grass-600">{icon}</span>
       <span className="min-w-0 flex-1">
         <span className="block text-[11px] font-bold text-ink">{label}</span>
         {children}
       </span>
-    </label>
+    </Tag>
   );
 }
 
 export function HeroSearch() {
   const router = useRouter();
   const [region, setRegion] = useState<RegionCode | "">("");
-  const [date, setDate] = useState("");
+  const [range, setRange] = useState<{ start: string | null; end: string | null }>({ start: null, end: null });
   const [guests, setGuests] = useState(2);
   const [imgOk, setImgOk] = useState(true);
 
-  const go = (d?: string) =>
+  const go = (r = range) =>
     router.push(
-      "/search" + filterToQuery({ regionCode: region || undefined, date: (d ?? date) || undefined, guests: guests || undefined }),
+      "/search" +
+        filterToQuery({
+          regionCode: region || undefined,
+          date: r.start ?? undefined,
+          endDate: r.end ?? undefined,
+          guests: guests || undefined,
+        }),
     );
 
   const control = "w-full bg-transparent text-[15px] text-soil-700 outline-none";
@@ -91,8 +110,23 @@ export function HeroSearch() {
               </select>
             </Field>
             <span className="hidden h-8 w-px bg-soil-200 md:block" aria-hidden="true" />
-            <Field icon={<CalendarDays className="size-5" />} label="언제">
-              <input type="date" value={date} min={relDate(1)} onChange={(e) => setDate(e.target.value)} className={control} />
+            <Field icon={<CalendarDays className="size-5" />} label="언제 (기간)" asDiv>
+              <DateRangePicker
+                start={range.start}
+                end={range.end}
+                title="언제 가실 건가요?"
+                onChange={(start, end) => setRange({ start, end })}
+              >
+                {(label, open) => (
+                  <button
+                    type="button"
+                    onClick={open}
+                    className={`w-full truncate text-left text-[15px] ${range.start ? "text-ink" : "text-soil-400"}`}
+                  >
+                    {range.start ? label : "체크인 ~ 체크아웃"}
+                  </button>
+                )}
+              </DateRangePicker>
             </Field>
             <span className="hidden h-8 w-px bg-soil-200 md:block" aria-hidden="true" />
             <Field icon={<Users className="size-5" />} label="몇 명">
@@ -117,7 +151,10 @@ export function HeroSearch() {
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => go(nextWeekday(6))}
+              onClick={() => {
+                const sat = nextWeekday(6);
+                go({ start: sat, end: addDays(sat, 1) });
+              }}
               className="rounded-full bg-white/15 px-3.5 py-1.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/25"
             >
               이번 주말 빈 마당
