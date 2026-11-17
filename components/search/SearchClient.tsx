@@ -43,6 +43,7 @@ export function SearchClient() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-4">
+      <h1 className="sr-only">마당 찾기</h1>
       <FilterPanel filter={filter} onChange={update} />
 
       <div className="mt-3 flex items-center justify-between">
