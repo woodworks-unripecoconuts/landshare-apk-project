@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
-import { TopNotice } from "@/components/layout/TopNotice";
+import { PageNotice } from "@/components/layout/PageNotice";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -38,9 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="flex min-h-full flex-col">
         <Providers>
-          <TopNotice />
           <Header />
           <main className="flex-1">{children}</main>
+          <PageNotice />
           <Footer />
           <BottomNav />
         </Providers>

@@ -19,7 +19,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="mt-16 border-t border-soil-200 bg-soil-50 pb-24 md:pb-8">
+    <footer className="border-t border-soil-200 bg-soil-50 pb-24 md:pb-8">
       <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-soil-700">
         <div className="flex items-center gap-2">
           <LogoIcon size={28} />
