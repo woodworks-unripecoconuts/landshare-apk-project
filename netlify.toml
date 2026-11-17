@@ -1,6 +1,5 @@
 # Netlify 배포 설정 (마당공유)
-# Netlify가 Next.js 프로젝트를 자동으로 알아보고 공식 Next.js 런타임(OpenNext 어댑터)을 붙여 줍니다.
-# 따로 플러그인을 설치할 필요가 없습니다.
+# Next.js 런타임 플러그인은 아래 [[plugins]]에 적어 두었습니다 (package.json devDependencies에도 있음).
 
 [build]
   command = "npm run build"
@@ -8,3 +7,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Next.js 런타임(OpenNext 어댑터)을 명시적으로 사용합니다.
+# GitHub 연결 자동 배포에서 자동 감지가 안 되면 서버 함수가 빠져 사이트가 열리지 않기 때문입니다.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

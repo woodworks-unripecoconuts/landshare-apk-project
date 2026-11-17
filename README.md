@@ -75,7 +75,8 @@ npm run dev -- -H 0.0.0.0
   - 빌드 명령: `npm run build`
   - 결과 폴더: `.next`
   - Node 버전: 22
-- Netlify가 Next.js를 자동으로 알아보고 공식 Next.js 런타임을 붙여 줘서, 따로 설치할 플러그인은 없어요.
+- Next.js 런타임 플러그인(`@netlify/plugin-nextjs`)을 `netlify.toml`에 직접 적어 두었어요. 빠지면 서버 함수 없이 배포돼 사이트가 열리지 않아요.
+  - 배포 후 Netlify의 **Deploys → 해당 배포** 화면에 함수(`___netlify-server-handler`)가 1개 있는지 보면 확인할 수 있어요.
 - 배포하기 전에 내 컴퓨터에서 `npm run build`가 에러 없이 끝나는지 먼저 확인하세요.
 
 ### GitHub와 연결해서 자동 배포 받기 (한 번만)
