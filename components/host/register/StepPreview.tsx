@@ -27,7 +27,7 @@ export function StepPreview({ draft }: { draft: RegisterDraft }) {
         👀 마당손님에게 이렇게 보여요. 정확한 주소는 숨겨지고 동네 단위 원으로만 표시돼요. 고칠 곳이 있으면 &lsquo;이전&rsquo;을
         눌러 돌아가세요.
       </p>
-      <div className="overflow-hidden rounded-3xl border border-soil-200 bg-cream pb-6">
+      <div className="overflow-hidden rounded-3xl border border-soil-200 bg-white pb-6">
         <SpaceDetailView space={space} host={user} hostVerified={isHostVerified(user)} ratingAvg={null} ratingCount={0} preview />
       </div>
       <p className="rounded-xl bg-sun-100 p-3 text-sm font-semibold text-soil-800">{NO_FEE_NOTICE}</p>

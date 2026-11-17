@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import { BadgeCheck, SlidersHorizontal, X } from "lucide-react";
 import type { SpaceFilter } from "@/lib/repository";
 import type { AmenityKey, RegionCode, SpaceType } from "@/lib/domain/types";
 import { REGIONS } from "@/data/regions";
@@ -18,8 +18,8 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       onClick={onClick}
       aria-pressed={on}
       className={cn(
-        "flex h-9 items-center gap-1 rounded-full border px-3 text-sm font-semibold whitespace-nowrap",
-        on ? "border-grass-600 bg-grass-600 text-white" : "border-soil-200 bg-white text-soil-700 hover:bg-soil-50",
+        "flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold whitespace-nowrap transition",
+        on ? "border-ink bg-ink text-white" : "border-soil-200 bg-white text-soil-700 hover:border-soil-400",
       )}
     >
       {children}
@@ -37,20 +37,20 @@ function toggle<T>(list: T[] | undefined, v: T): T[] | undefined {
 export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChange: (f: SpaceFilter) => void }) {
   const [open, setOpen] = useState(false);
   const extraCount = (filter.amenities?.length ?? 0) + (filter.date ? 1 : 0) + (filter.guests ? 1 : 0);
-  const anyFilter = !!(filter.regionCode || filter.types?.length || extraCount);
+  const anyFilter = !!(filter.regionCode || filter.types?.length || filter.verifiedOnly || extraCount);
 
   const label = "text-xs font-bold text-soil-600";
   const input = "h-10 w-full rounded-xl border border-soil-200 bg-white px-3 text-[15px]";
 
   return (
-    <div className="space-y-3 rounded-2xl border border-soil-200/70 bg-white/80 p-3 shadow-soft">
-      {/* 항상 보이는 줄: 시·군 + 유형 */}
-      <div className="flex flex-wrap items-center gap-2">
+    <div className="space-y-3">
+      {/* 항상 보이는 줄: 시·군 + 유형 + 인증 + 상세 필터 (모바일은 가로 스크롤) */}
+      <div className="no-scrollbar -mx-4 flex items-center gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
         <select
           aria-label="시·군"
           value={filter.regionCode ?? ""}
           onChange={(e) => onChange({ ...filter, regionCode: (e.target.value || undefined) as RegionCode | undefined })}
-          className="h-9 rounded-full border border-soil-200 bg-white px-3 text-sm font-semibold"
+          className="h-9 shrink-0 rounded-full border border-soil-200 bg-white px-3.5 text-sm font-semibold"
         >
           <option value="">강원 전체</option>
           {REGIONS.map((r) => (
@@ -68,11 +68,14 @@ export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChang
             <span aria-hidden="true">{t.emoji}</span> {t.label}
           </Chip>
         ))}
+        <Chip on={!!filter.verifiedOnly} onClick={() => onChange({ ...filter, verifiedOnly: filter.verifiedOnly ? undefined : true })}>
+          <BadgeCheck className="size-4" /> 인증 마당지기
+        </Chip>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="flex h-9 items-center gap-1 rounded-full border border-soil-300 px-3 text-sm font-semibold text-soil-800"
+          className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-soil-200 px-3.5 text-sm font-semibold text-ink hover:border-soil-400"
         >
           <SlidersHorizontal className="size-4" /> 상세 필터{extraCount ? ` ${extraCount}` : ""}
         </button>
@@ -80,7 +83,7 @@ export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChang
           <button
             type="button"
             onClick={() => onChange({})}
-            className="flex h-9 items-center gap-1 px-2 text-sm text-soil-500 hover:text-soil-800"
+            className="flex h-9 shrink-0 items-center gap-1 px-2 text-sm font-semibold text-soil-500 underline-offset-4 hover:text-ink hover:underline"
           >
             <X className="size-4" /> 초기화
           </button>
@@ -88,7 +91,7 @@ export function FilterPanel({ filter, onChange }: { filter: SpaceFilter; onChang
       </div>
 
       {open && (
-        <div className="grid gap-3 border-t border-soil-100 pt-3 sm:grid-cols-2">
+        <div className="grid gap-4 rounded-3xl border border-soil-200/80 bg-white p-4 shadow-soft sm:grid-cols-2">
           <label className="space-y-1">
             <span className={label}>이용 날짜</span>
             <input

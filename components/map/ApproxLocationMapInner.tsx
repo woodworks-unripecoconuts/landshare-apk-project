@@ -29,7 +29,7 @@ export default function ApproxLocationMapInner({ approxCenter, radiusM, type, ex
         <Circle
           center={approxCenter}
           radius={radiusM}
-          pathOptions={{ color: "#4f7a3a", fillColor: "#80a75c", fillOpacity: 0.25, weight: 2 }}
+          pathOptions={{ color: "#2f5d3a", fillColor: "#5f9068", fillOpacity: 0.25, weight: 2 }}
         />
       )}
     </MapContainer>

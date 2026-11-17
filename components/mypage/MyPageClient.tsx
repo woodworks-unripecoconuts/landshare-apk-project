@@ -8,7 +8,7 @@ import { isHostVerified } from "@/lib/domain/space-rules";
 import { formatDateTime } from "@/lib/domain/dates";
 import { Tabs } from "@/components/ui/Tabs";
 import { LinkButton } from "@/components/ui/Button";
-import { SpaceImage } from "@/components/space/SpaceImage";
+import { Avatar } from "@/components/ui/Avatar";
 import { HostVerifyBadge } from "@/components/space/SpaceBadges";
 import { BookingList } from "./BookingList";
 import { MySpaces } from "./MySpaces";
@@ -44,9 +44,7 @@ export function MyPageClient() {
     <div className="mx-auto max-w-2xl px-4 py-5">
       {/* 프로필 */}
       <section className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-soft">
-        <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-soil-100">
-          <SpaceImage src={user.avatarUrl} alt="" sizes="64px" />
-        </div>
+        <Avatar name={user.name} src={user.avatarUrl} size={64} />
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold text-grass-700">{role && ROLE_LABEL[role]}</p>
           <p className="text-lg font-extrabold">{user.name}</p>

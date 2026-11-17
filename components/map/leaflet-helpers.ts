@@ -10,17 +10,20 @@ export const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/c
 
 const TYPE_EMOJI: Record<SpaceType, string> = { camping: "⛺", carcamp: "🚙", picnic: "🧺" };
 
-/** 마당 마커 (이미지 파일 없이 HTML로 그려서 배포 후에도 아이콘이 깨지지 않음) */
+/** 마당 마커: 알약 모양 라벨 (이미지 파일 없이 HTML로 그려서 배포 후에도 깨지지 않음) */
+const TYPE_SHORT: Record<SpaceType, string> = { camping: "캠핑", carcamp: "차박", picnic: "나들이" };
+
 export function spaceMarkerIcon(type: SpaceType, active = false): L.DivIcon {
-  const bg = active ? "#3f6230" : "#ffffff";
-  const border = active ? "#3f6230" : "#4f7a3a";
-  const size = active ? 40 : 34;
+  const label = `${TYPE_EMOJI[type]} ${TYPE_SHORT[type]}`;
+  const width = type === "picnic" ? 78 : 66;
+  const bg = active ? "#1f2420" : "#ffffff";
+  const color = active ? "#ffffff" : "#1f2420";
   return L.divIcon({
     className: "madang-marker",
-    html: `<div style="width:${size}px;height:${size}px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${bg};border:2px solid ${border};box-shadow:0 2px 6px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);font-size:${active ? 18 : 15}px">${TYPE_EMOJI[type]}</span></div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size],
-    popupAnchor: [0, -size],
+    html: `<div style="display:flex;align-items:center;justify-content:center;height:30px;width:${width}px;border-radius:999px;background:${bg};color:${color};font-weight:700;font-size:12.5px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);transform:${active ? "scale(1.08)" : "none"};transition:transform .15s">${label}</div>`,
+    iconSize: [width, 30],
+    iconAnchor: [width / 2, 15],
+    popupAnchor: [0, -18],
   });
 }
 
@@ -28,7 +31,7 @@ export function spaceMarkerIcon(type: SpaceType, active = false): L.DivIcon {
 export function pickerIcon(): L.DivIcon {
   return L.divIcon({
     className: "madang-marker",
-    html: `<div style="width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#b9862b;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>`,
+    html: `<div style="width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#d2803f;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 30],
   });

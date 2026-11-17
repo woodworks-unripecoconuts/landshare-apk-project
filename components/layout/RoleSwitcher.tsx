@@ -47,7 +47,7 @@ export function RoleSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex h-9 items-center gap-1.5 rounded-full border border-soil-200 bg-white pr-2.5 pl-2 text-sm font-semibold text-soil-800 shadow-soft hover:bg-soil-50"
+        className="flex h-10 items-center gap-1.5 rounded-full border border-soil-200 bg-white pr-3 pl-2.5 text-sm font-semibold text-ink transition hover:shadow-soft"
       >
         <span aria-hidden="true">{current?.emoji}</span>
         <span className="max-w-[9rem] truncate">
@@ -60,7 +60,7 @@ export function RoleSwitcher() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-soil-200 bg-white shadow-xl"
+          className="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-soil-200/70 bg-white shadow-lift"
         >
           <p className="border-b border-soil-100 bg-soil-50 px-4 py-2 text-xs text-soil-600">
             가짜 로그인 · 데모 계정으로 전환

@@ -2,7 +2,7 @@
  * 가짜 마당(공간) 20개 — 강원 18개 시·군에 골고루 (춘천·강릉은 2개씩)
  *
  * - 주소는 모두 "(가상 주소)"이며 실제 사람·집과 관계없습니다.
- * - 사진은 무료 placeholder 이미지(picsum.photos)라 실제 마당 사진과 다릅니다.
+ * - 사진은 무료 placeholder 자연 사진(picsum.photos, data/images.ts)이라 실제 마당 사진과 다릅니다.
  * - 신청 가능 날짜는 "오늘 기준"으로 만들어져 언제 열어도 데모가 동작합니다.
  */
 import type { AmenityKey, LandType, LatLng, RegionCode, Space, SpacePrivate, SpaceType } from "@/lib/domain/types";
@@ -11,6 +11,7 @@ import { APPROX_RADIUS_M, makeApproxCenter, sanitizeAmenities } from "@/lib/doma
 import { LEGAL_NOTICES } from "./legal-notices";
 import { getRegion } from "./regions";
 import { DEMO_HOST_ID } from "./users";
+import { naturePhoto } from "./images";
 
 type Availability = "weekends" | "everyday" | "weekdays" | "alternate";
 
@@ -53,8 +54,9 @@ function availableDatesFor(a: Availability) {
   }
 }
 
-const photos = (id: string, n: number) =>
-  Array.from({ length: n }, (_, i) => `https://picsum.photos/seed/madang-${id}-${i + 1}/960/640`);
+/** 마당마다 서로 다른 자연 사진을 n장 고릅니다. */
+const photos = (spaceIndex: number, n: number) =>
+  Array.from({ length: n }, (_, i) => naturePhoto(spaceIndex * 3 + i * 5));
 
 const BASE_RULES = ["쓰레기는 음식물까지 모두 되가져가 주세요", "밤 10시 이후에는 조용히 해 주세요"];
 
@@ -203,7 +205,7 @@ const INPUTS: SpaceSeedInput[] = [
 
 const ALL_LEGAL_IDS = LEGAL_NOTICES.map((n) => n.id);
 
-export const seedSpaces: Space[] = INPUTS.map((s) => {
+export const seedSpaces: Space[] = INPUTS.map((s, index) => {
   const created = relDateTime(-s.createdDaysAgo);
   return {
     id: s.id,
@@ -223,7 +225,7 @@ export const seedSpaces: Space[] = INPUTS.map((s) => {
     rules: s.rules,
     ...TIMES[s.type],
     availableDates: availableDatesFor(s.availability),
-    photos: photos(s.id.replace("-", ""), s.photoCount),
+    photos: photos(index, s.photoCount),
     status: "active",
     legalCheckedIds: ALL_LEGAL_IDS,
     createdAt: created,

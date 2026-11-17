@@ -11,8 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "강원의 남는 마당을 무료로 나누는 캠핑·차박·나들이 공유 (프로토타입)",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f1e6",
-    theme_color: "#4f7a3a",
+    background_color: "#faf8f4",
+    theme_color: "#2f5d3a",
     lang: "ko",
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },

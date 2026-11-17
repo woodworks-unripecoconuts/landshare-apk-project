@@ -64,6 +64,7 @@ npm run dev -- -H 0.0.0.0
 | 가짜 마당 20개 | `data/spaces.ts` |
 | 광고(애드센스·애드핏) | `lib/ads/config.ts`, `components/ads/AdSlot.tsx` |
 | 색·글꼴 | `app/globals.css` |
+| 가짜 사진(자연 풍경) | `data/images.ts` |
 | Supabase로 옮기기 | `lib/repository/supabase/README.md` |
 
 ## 배포 (Netlify)

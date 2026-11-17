@@ -42,11 +42,17 @@ export function SearchClient() {
     .join(" · ");
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4">
+    <div>
       <h1 className="sr-only">마당 찾기</h1>
-      <FilterPanel filter={filter} onChange={update} />
+      {/* 헤더 아래 고정 필터 줄 */}
+      <div className="sticky top-16 z-30 border-b border-soil-200/60 bg-white/95 backdrop-blur md:top-[72px]">
+        <div className="mx-auto max-w-[1400px] px-4 py-3">
+          <FilterPanel filter={filter} onChange={update} />
+        </div>
+      </div>
 
-      <div className="mt-3 flex items-center justify-between">
+      <div className="mx-auto max-w-[1400px] px-4 py-4">
+      <div className="flex items-center justify-between">
         <p className="text-sm text-soil-700">
           <b className="text-ink">{summary}</b> {loading ? "찾는 중…" : `${items.length}곳`}
         </p>
@@ -77,13 +83,13 @@ export function SearchClient() {
 
       <ErrorBox error={error} />
 
-      <div className="mt-3 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-5">
+      <div className="mt-4 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-8">
         {/* 목록 */}
         <div className={cn(view === "map" && "hidden lg:block")}>
           {loading ? (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-x-5 gap-y-8 sm:grid-cols-2">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="aspect-[4/4] animate-pulse rounded-2xl bg-soil-100" />
+                <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-soil-100" />
               ))}
             </div>
           ) : items.length === 0 ? (
@@ -93,7 +99,7 @@ export function SearchClient() {
               </Button>
             </EmptyState>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-x-5 gap-y-8 sm:grid-cols-2">
               {items.map((item, i) => (
                 <Fragment key={item.space.id}>
                   <SpaceCard item={item} highlighted={activeId === item.space.id} onHover={setActiveId} />
@@ -109,7 +115,7 @@ export function SearchClient() {
 
         {/* 지도 */}
         <div className={cn("lg:block", view === "list" && "hidden")}>
-          <div className="h-[calc(100dvh-15rem)] min-h-[360px] lg:sticky lg:top-24 lg:h-[calc(100dvh-8rem)]">
+          <div className="h-[calc(100dvh-16rem)] min-h-[360px] overflow-hidden rounded-3xl lg:sticky lg:top-[150px] lg:h-[calc(100dvh-170px)]">
             <SearchMap
               items={items}
               activeId={activeId}
@@ -132,6 +138,7 @@ export function SearchClient() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -103,6 +103,8 @@ export interface SpaceFilter {
   guests?: number;
   /** 이 편의시설을 모두 갖춘 곳만 */
   amenities?: AmenityKey[];
+  /** 인증 마당지기(본인 인증 + 소유 확인)의 마당만 */
+  verifiedOnly?: boolean;
 }
 
 /** 마당 등록·수정 입력 (id·마당지기·상태 등은 저장소가 정함) */

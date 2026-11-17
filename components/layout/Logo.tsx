@@ -5,7 +5,7 @@ import { SERVICE_NAME, SERVICE_NAME_EN } from "@/data/policies";
 export function LogoIcon({ size = 32 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
-      <rect width="40" height="40" rx="11" fill="#4f7a3a" />
+      <rect width="40" height="40" rx="11" fill="#2f5d3a" />
       <path
         d="M8.5 20.5 20 11l11.5 9.5"
         fill="none"
@@ -14,9 +14,9 @@ export function LogoIcon({ size = 32 }: { size?: number }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M8 30.5h24" stroke="#d9a441" strokeWidth="3.2" strokeLinecap="round" />
-      <path d="M20 28.5c0-4.6 2.8-7.6 7-8.3 0 4.6-2.8 7.6-7 8.3Z" fill="#e2edd6" />
-      <path d="M20 28.5c0-3.2-1.9-5.3-4.8-5.8 0 3.2 1.9 5.3 4.8 5.8Z" fill="#c6dbb0" />
+      <path d="M8 30.5h24" stroke="#d2803f" strokeWidth="3.2" strokeLinecap="round" />
+      <path d="M20 28.5c0-4.6 2.8-7.6 7-8.3 0 4.6-2.8 7.6-7 8.3Z" fill="#dce8dd" />
+      <path d="M20 28.5c0-3.2-1.9-5.3-4.8-5.8 0 3.2 1.9 5.3 4.8 5.8Z" fill="#b9d1bc" />
     </svg>
   );
 }

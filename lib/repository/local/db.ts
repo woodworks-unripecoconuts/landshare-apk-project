@@ -25,7 +25,7 @@ import { seedDiaries } from "@/data/diaries";
 import { seedReports } from "@/data/reports";
 import { seedVerificationRequests } from "@/data/verification-requests";
 
-export const SEED_VERSION = 2;
+export const SEED_VERSION = 3;
 
 export type Tables = {
   users: User[];

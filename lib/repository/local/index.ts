@@ -202,7 +202,8 @@ export function createLocalRepository(): Repository {
               (s.availableDates.includes(filter.date) && !takenDatesOf(s.id, bookings).includes(filter.date)),
           )
           .sort(newestFirst)
-          .map((s) => toListItem(s, idx));
+          .map((s) => toListItem(s, idx))
+          .filter((item) => !filter.verifiedOnly || item.hostVerified);
         return delay(result);
       },
 

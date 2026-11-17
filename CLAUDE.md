@@ -53,7 +53,8 @@ lib/hooks/    화면이 데이터를 쓰는 React 훅 (repository 호출을 감�
 - `localStorage`/`window.localStorage`를 컴포넌트에서 직접 쓰지 않는다 → `lib/storage/local-store.ts`.
 - 새 데이터 종류를 추가할 때: `lib/domain/types.ts` 타입 → `lib/repository/types.ts` 인터페이스 → `lib/repository/local/` 구현 → `data/` 시드 → 시드 버전(`SEED_VERSION`) 올리기.
 - 지도(Leaflet)는 브라우저 전용 → `next/dynamic(..., { ssr: false })`로 불러온다. 마커는 `L.divIcon` 사용.
-- 이미지: `next.config.ts`에서 `images.unoptimized: true` + `remotePatterns`(picsum). 사진은 `components/space/SpaceImage.tsx`로 표시(실패 시 로컬 폴백).
+- 이미지: `next.config.ts`에서 `images.unoptimized: true` + `remotePatterns`(picsum). 사진은 `components/space/SpaceImage.tsx`로 표시(실패 시 로컬 폴백). 가짜 사진 목록은 `data/images.ts`(자연 사진 번호).
+- 디자인: Hipcamp(미국)·Campspace(네덜란드) 스타일 참고 — 흰 바탕, 큰 사진 카드(`SpaceCard`), 알약 모양 검색·필터, 둥근 모서리(2xl~3xl), 상세는 사진 격자 + 오른쪽 고정 신청 카드. 색은 `app/globals.css`의 grass(숲)·soil(흙)·sun(노을) 토큰만 사용.
 
 ## 배포: Netlify
 - Netlify의 Next.js 자동 지원(OpenNext 어댑터)으로 배포. 설정은 `netlify.toml` (빌드 `npm run build`, publish `.next`, Node 22).

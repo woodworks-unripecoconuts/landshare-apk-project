@@ -1,7 +1,7 @@
 import { BadgeCheck, Hourglass, CircleAlert } from "lucide-react";
 import type { User, VerificationStatus } from "@/lib/domain/types";
 import { VERIFICATION_STATUS_LABEL } from "@/lib/domain/labels";
-import { SpaceImage } from "./SpaceImage";
+import { Avatar } from "@/components/ui/Avatar";
 import { HostVerifyBadge } from "./SpaceBadges";
 
 function StatusRow({ label, status }: { label: string; status: VerificationStatus }) {
@@ -21,10 +21,8 @@ function StatusRow({ label, status }: { label: string; status: VerificationStatu
 export function HostProfile({ host, verified }: { host: User | null; verified: boolean }) {
   if (!host) return null;
   return (
-    <div className="flex gap-4 rounded-2xl border border-soil-200/70 bg-white p-4">
-      <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-soil-100">
-        <SpaceImage src={host.avatarUrl} alt={`${host.name} 프로필`} sizes="64px" />
-      </div>
+    <div className="flex gap-4 rounded-3xl border border-soil-200/70 bg-white p-5">
+      <Avatar name={host.name} src={host.avatarUrl} size={64} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-bold">마당지기 {host.name}</p>

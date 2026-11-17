@@ -29,6 +29,15 @@ export function relDate(n: number): DateString {
   return toDateString(d);
 }
 
+/** 다가오는 특정 요일 (0=일 … 6=토). 오늘은 빼고 내일부터 찾습니다. */
+export function nextWeekday(weekday: number): DateString {
+  for (let i = 1; i <= 7; i++) {
+    const s = relDate(i);
+    if (fromDateString(s).getDay() === weekday) return s;
+  }
+  return relDate(1);
+}
+
 /** 오늘로부터 n일 뒤 특정 시각의 ISO 문자열 */
 export function relDateTime(n: number, hour = 10, minute = 0): string {
   const d = new Date();
