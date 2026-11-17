@@ -1,0 +1,10 @@
+# Netlify 배포 설정 (마당공유)
+# Netlify가 Next.js 프로젝트를 자동으로 알아보고 공식 Next.js 런타임(OpenNext 어댑터)을 붙여 줍니다.
+# 따로 플러그인을 설치할 필요가 없습니다.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
